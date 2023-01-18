@@ -1,10 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '../controllers';
-import { WhitelistService } from '../services';
+import { ConfigModule } from '@nestjs/config';
+import { WhitelistController } from '../controllers';
+import configuration from '../common/env';
+import('dotenv/config');
+
+const ENV = process.env.NODE_ENV;
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [WhitelistService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: !ENV ? '.env' : `.${ENV}.env`,
+    }),
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+  ],
+  controllers: [WhitelistController],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule { }

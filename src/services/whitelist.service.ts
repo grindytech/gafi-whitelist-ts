@@ -60,12 +60,12 @@ export class WhitelistService {
     })
   }
 
-  add(pool_id: string, addresses: string[]): Promise<IWhitelist> {
+  add(whitelist: IWhitelist): Promise<IWhitelist> {
     return new Promise<IWhitelist>(async (resolve, reject) => {
       try {
-        let wl = await this.get(pool_id);
+        let wl = await this.get(whitelist.pool_id);
         if (wl) {
-          wl.whitelist = wl.whitelist.concat(addresses);
+          wl.whitelist = wl.whitelist.concat(whitelist.whitelist);
 
           await this.create(wl);
           resolve(wl);

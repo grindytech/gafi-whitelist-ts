@@ -1,7 +1,7 @@
-import { Keyring } from '@polkadot/api';
-import { u8aToHex } from '@polkadot/util';
-import { mnemonicGenerate, cryptoWaitReady } from '@polkadot/util-crypto';
+
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { IWhitelist } from './types';
+import { genRanHex, generate_adresses } from './utils.service';
 import { WhitelistService } from './whitelist.service';
 
 const SOURCE = "src/services/test";
@@ -12,20 +12,7 @@ describe('Whitelist', () => {
         await cryptoWaitReady();
     });
 
-    const generate_adresses = (num: number): string[] => {
-        const keyring = new Keyring({ type: 'sr25519', ss58Format: 42 });
-        let addresses: string[] = [];
-        for (let i = 0; i < 2; i++) {
-            let seed = mnemonicGenerate();
-            const pair = keyring.addFromUri(seed, { name: 'key pair' }, 'sr25519');
-            const addr_hex = u8aToHex(pair.publicKey, undefined, false);
-            addresses.push(addr_hex);
-        }
-        return addresses;
-    }
-
     it('should create whitelist', async () => {
-        const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
         let pool_id = genRanHex(64);
 
@@ -54,7 +41,11 @@ describe('Whitelist', () => {
     it('add whitelist work', async () => {
         let new_address = generate_adresses(2);
         let whitelist = new WhitelistService(SOURCE);
-        await whitelist.add(WL.pool_id, new_address);
+        let add_wl: IWhitelist = {
+            pool_id: WL.pool_id,
+            whitelist: new_address,
+        }
+        await whitelist.add(add_wl);
 
         await new Promise((r) => setTimeout(r, 1000));
 
