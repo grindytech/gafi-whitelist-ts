@@ -1,73 +1,149 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# GAFI-WHITELIST
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+  Provide offchain-worker whitelist
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Table of contents
 
-## Description
+- [Quick Start](#quick-start)
+  - [Requirements](#requirements)
+  - [Reference](#reference)
+  - [Installation](#installation)
+- [API](#API)
+  - [create](#create)
+  - [add](#add)
+  - [verify](#verify)
+  - [get](#get)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Quick Start
 
-## Installation
+ ```
+ 
+  $ git clone https://github.com/grindytech/gafi-whitelist-ts
+  
+  $ cd gafi-whitelist
+  
+  $ yarn
+  
+  $ yarn start:dev
+ 
+ ```
 
-```bash
-$ npm install
+### Requirements
+
+OS: Linux
+
+Development environment: NodeJs
+
+
+### Reference
+
+### Installation
+
+## API
+
+### create
+
+```
+url: /whitelist/create
+
+example: http://whitelist.gafi.network/whitelist/create
+
+method: POST
+
+Body: 
+{
+    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "address": [
+        "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b"
+    ]
+}
+
+successResponse:
+{
+    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "address": [
+        "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b"
+    ]
+}
 ```
 
-## Running the app
+| RequestField  | Type | Description |
+| ------------- | ------------- | ------------- |
+| pool_id | string  |  64 characters |
+| address | [string]  |  list of valid address(hex string)|
 
-```bash
-# development
-$ npm run start
+### add
 
-# watch mode
-$ npm run start:dev
+ ```
+description: add new addresses to whitelist
 
-# production mode
-$ npm run start:prod
+url: /whitelist/add
+
+example: http://whitelist.gafi.network/whitelist/add
+
+method: POST
+
+Body:
+{
+    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "address": [
+        "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
+    ]
+}
+
+
+successResponse:
+{
+    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "address": [
+        "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b",
+        "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
+    ]
+}
+
 ```
+| RequestField  | Type | Description |
+| ------------- | ------------- | ------------- |
+| pool_id | string  |  64 characters |
+| address | [string]  |  list of valid address(hex string)|
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+### verify
 
-# e2e tests
-$ npm run test:e2e
+ ```
+url: /whitelist/verify?pool_id={}&address={}
 
-# test coverage
-$ npm run test:cov
+example: http://whitelist.gafi.network/whitelist/verify?pool_id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275&address=0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b
+
+method: GET
+
+successResponse: true/false
 ```
+| RequestField  | Type | Description |
+| ------------- | ------------- | ------------- |
+| pool_id | string  |  64 characters |
+| address | string  |  valid address(hex string)|
 
-## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+### get
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+ ```
+url: /whitelist/get?pool_id={}
 
-## License
+example: http://whitelist.gafi.network/whitelist/get?pool_id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275
+method: GET
 
-Nest is [MIT licensed](LICENSE).
+successResponse:
+{
+    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "address": [
+        "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b",
+        "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
+    ]
+}
+```
+| RequestField  | Type | Description |
+| ------------- | ------------- | ------------- |
+| pool_id | string  |  64 characters |
+

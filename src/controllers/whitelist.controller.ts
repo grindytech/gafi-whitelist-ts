@@ -4,7 +4,7 @@ import {Body, Controller, Get, Post, Query  } from '@nestjs/common';
 import('dotenv/config');
 
 export interface IVerify {
-  pood_id: string;
+  pool_id: string;
   address: string;
 };
 
@@ -33,6 +33,6 @@ export class WhitelistController {
 
   @Get('verify')
   async verify(@Query() query: IVerify): Promise<boolean> {
-    return await this.whitelistService.verify(query.pood_id, query.address);
+    return await this.whitelistService.verify(query.pool_id, query.address);
   }
 }

@@ -14,7 +14,6 @@ export class WhitelistService {
     return new Promise<IWhitelist>(async (resolve, reject) => {
       try {
         is_pool(pool_id);
-
         try {
           let wl = await read_whitelist(this.source, pool_id);
 

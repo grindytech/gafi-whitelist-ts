@@ -63,8 +63,8 @@ describe('WhitelistController', () => {
     });
 
     it('verify work', async () => {
-        expect(await appController.verify({ pood_id: pool_id, address: addresses[0] })).toEqual(true);
-        expect(await appController.verify({ pood_id: pool_id, address: generate_adresses(1)[0] })).toEqual(false);
+        expect(await appController.verify({ pool_id, address: addresses[0] })).toEqual(true);
+        expect(await appController.verify({ pool_id, address: generate_adresses(1)[0] })).toEqual(false);
     })
   });
 });
