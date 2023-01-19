@@ -15,7 +15,7 @@ describe('Utils', () => {
     it('should write whitelist', async () => {
         const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
 
-        let pool_id = genRanHex(64);
+        let id = genRanHex(64);
         const keyring = new Keyring({ type: 'sr25519', ss58Format: 42 });
 
         let address = [];
@@ -27,19 +27,19 @@ describe('Utils', () => {
         }
 
         let input: IWhitelist = {
-            pool_id: pool_id,
+            id: id,
             whitelist: address,
         }
 
         await write_whitelist(SOURCE, input);
         await new Promise((r) => setTimeout(r, 1000));
-        let wl = await read_whitelist(SOURCE, input.pool_id);
+        let wl = await read_whitelist(SOURCE, input.id);
         expect(wl).toEqual(input);
         WL = input;
     })
 
     it('should read whitelist', async () => {
-        let wl = await read_whitelist(SOURCE, WL.pool_id);
+        let wl = await read_whitelist(SOURCE, WL.id);
         expect(wl).toEqual(WL);
     })
 

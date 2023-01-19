@@ -10,15 +10,15 @@ export class WhitelistService {
 
   constructor(private readonly source: string) { }
 
-  get(pool_id: string): Promise<IWhitelist> {
+  get(id: string): Promise<IWhitelist> {
     return new Promise<IWhitelist>(async (resolve, reject) => {
       try {
-        is_pool(pool_id);
+        is_pool(id);
         try {
-          let wl = await read_whitelist(this.source, pool_id);
+          let wl = await read_whitelist(this.source, id);
 
-          if (wl.pool_id !== pool_id) {
-            reject(`pool_id not found`);
+          if (wl.id !== id) {
+            reject(`id not found`);
             return;
           }
 
@@ -37,7 +37,7 @@ export class WhitelistService {
   create(whitelist: IWhitelist): Promise<IWhitelist> {
     return new Promise<IWhitelist>(async (resolve, reject) => {
       try {
-        is_pool(whitelist.pool_id);
+        is_pool(whitelist.id);
 
         for (let i = 0; i < whitelist.whitelist.length; i++) {
           if (whitelist.whitelist[i].startsWith("0x")) {
@@ -62,7 +62,7 @@ export class WhitelistService {
   add(whitelist: IWhitelist): Promise<IWhitelist> {
     return new Promise<IWhitelist>(async (resolve, reject) => {
       try {
-        let wl = await this.get(whitelist.pool_id);
+        let wl = await this.get(whitelist.id);
         if (wl) {
           wl.whitelist = wl.whitelist.concat(whitelist.whitelist);
 
@@ -78,10 +78,10 @@ export class WhitelistService {
     })
   }
 
-  verify(pool_id: string, address: string): Promise<boolean> {
+  verify(id: string, address: string): Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
       try {
-        let wl = await this.get(pool_id);
+        let wl = await this.get(id);
         let found_addr = wl.whitelist.find(e => e == address);
         if (found_addr !== undefined && found_addr === address) {
           resolve(true);

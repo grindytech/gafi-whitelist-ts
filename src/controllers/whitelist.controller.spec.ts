@@ -1,70 +1,102 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { WhitelistController } from './whitelist.controller';
-import { WhitelistService } from '../services/whitelist.service';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { generate_adresses, genRanHex, IWhitelist } from '../services';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
 
 describe('WhitelistController', () => {
 
-  let appController: WhitelistController;
-  let pool_id: string;
+  let id: string;
   let addresses: string[];
   let new_addresses: string[];
+  let app: INestApplication;
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
       controllers: [WhitelistController],
       providers: [],
     }).compile();
 
-    appController = app.get<WhitelistController>(WhitelistController);
+    app = moduleRef.createNestApplication();
+    await app.init();
     await cryptoWaitReady();
   });
 
   describe('Whitelist', () => {
 
     it('init test values', () => {
-      pool_id = genRanHex(64);
+      id = genRanHex(64);
       addresses = generate_adresses(2);
       new_addresses = generate_adresses(2);
     })
 
     it('should create new whitelist', async () => {
       let wl: IWhitelist = {
-        pool_id,
+        id: id,
         whitelist: addresses,
       }
-      expect(await appController.create(wl)).toBe(wl);
+
+      await request(app.getHttpServer())
+        .post('/create')
+        .send(wl)
+        .expect(200)
+        .expect(wl);
+
+      await request(app.getHttpServer())
+        .get(`?id=${wl.id}`)
+        .expect(200)
+        .expect(wl);
     });
 
     it('should return whitelist', async () => {
       let wl: IWhitelist = {
-        pool_id: pool_id,
+        id: id,
         whitelist: addresses,
       }
-      await new Promise((r) => setTimeout(r, 1000));
-      expect(await appController.get(wl.pool_id)).toStrictEqual(wl);
+
+      await request(app.getHttpServer())
+        .get(`?id=${wl.id}`)
+        .expect(200)
+        .expect(wl);
     });
 
     it('should add new addresses', async () => {
       let wl: IWhitelist = {
-        pool_id,
+        id: id,
         whitelist: new_addresses,
       };
 
-      await appController.add(wl);
-      await new Promise((r) => setTimeout(r, 1000));
-
       let new_wl: IWhitelist = {
-        pool_id,
+        id: id,
         whitelist: addresses.concat(new_addresses),
       };
-      expect(await appController.get(wl.pool_id)).toStrictEqual(new_wl);
+
+      await request(app.getHttpServer())
+        .post('/add')
+        .send(wl)
+        .expect(200)
+        .expect(new_wl);
+
+      await new Promise((r) => setTimeout(r, 1000));
+
+      await request(app.getHttpServer())
+        .get(`?id=${wl.id}`)
+        .expect(200)
+        .expect(new_wl);
     });
 
     it('verify work', async () => {
-        expect(await appController.verify({ pool_id, address: addresses[0] })).toEqual(true);
-        expect(await appController.verify({ pool_id, address: generate_adresses(1)[0] })).toEqual(false);
+      let url = `/verify?id=${id}&address=${addresses[0]}`;
+      await request(app.getHttpServer())
+        .get(url)
+        .expect(200)
+        .expect({ result: true });
+
+      await request(app.getHttpServer())
+        .get(`/verify?id=${id}&address=${generate_adresses(1)[0]}`)
+        .expect(200)
+        .expect({ result: false });
     })
   });
 });

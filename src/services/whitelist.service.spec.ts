@@ -14,11 +14,11 @@ describe('Whitelist', () => {
 
     it('should create whitelist', async () => {
 
-        let pool_id = genRanHex(64);
+        let id = genRanHex(64);
 
 
         let input: IWhitelist = {
-            pool_id: pool_id,
+            id: id,
             whitelist: generate_adresses(2),
         }
 
@@ -26,14 +26,14 @@ describe('Whitelist', () => {
         let wl = await whitelist.create(input);
         await new Promise((r) => setTimeout(r, 1000));
 
-        let list = await whitelist.get(input.pool_id);
+        let list = await whitelist.get(input.id);
         expect(list).toEqual(input);
         WL = input;
     })
 
     it('should get pool whitelist', async () => {
         let whitelist = new WhitelistService(SOURCE);
-        let wl = await whitelist.get(WL.pool_id);
+        let wl = await whitelist.get(WL.id);
 
         expect(wl).toEqual(WL);
     })
@@ -42,7 +42,7 @@ describe('Whitelist', () => {
         let new_address = generate_adresses(2);
         let whitelist = new WhitelistService(SOURCE);
         let add_wl: IWhitelist = {
-            pool_id: WL.pool_id,
+            id: WL.id,
             whitelist: new_address,
         }
         await whitelist.add(add_wl);
@@ -51,19 +51,19 @@ describe('Whitelist', () => {
 
         let new_wl = WL;
         new_wl.whitelist = new_wl.whitelist.concat(new_address);
-        let wl = await whitelist.get(WL.pool_id);
+        let wl = await whitelist.get(WL.id);
         expect(wl).toEqual(new_wl);
     })
 
     it('verify work', async () => {
         let whitelist = new WhitelistService(SOURCE);
         {
-            let verify = await whitelist.verify(WL.pool_id, WL.whitelist[0]);
+            let verify = await whitelist.verify(WL.id, WL.whitelist[0]);
             expect(verify).toEqual(true);
         }
         {
             let new_address = generate_adresses(1);
-            let verify = await whitelist.verify(WL.pool_id, new_address[0]);
+            let verify = await whitelist.verify(WL.id, new_address[0]);
             expect(verify).toEqual(false);
         }
     })

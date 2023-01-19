@@ -1,14 +1,15 @@
 import { IWhitelist } from '../services';
 import { WhitelistService } from '../services';
-import {Body, Controller, Get, Post, Query  } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import('dotenv/config');
 
 export interface IVerify {
-  pool_id: string;
+  id: string;
   address: string;
 };
 
-@Controller('whitelist')
+@Controller('')
 export class WhitelistController {
   whitelistService: WhitelistService
 
@@ -17,22 +18,38 @@ export class WhitelistController {
   }
 
   @Get()
-  async get(@Query('pool_id') pool_id: string): Promise<IWhitelist>{
-    return await this.whitelistService.get(pool_id);
+  get(@Query('id') id: string, @Res() res: Response) {
+    this.whitelistService.get(id).then(value => {
+      res.status(HttpStatus.OK).json(value);
+    }).catch(err => {
+      res.status(HttpStatus.BAD_REQUEST).send(`Can not get whitelist err: ${err}`);
+    })
   }
 
   @Post('create')
-  async create(@Body() whitelist: IWhitelist): Promise<IWhitelist> {
-    return await this.whitelistService.create(whitelist);
+  create(@Body() whitelist: IWhitelist, @Res() res: Response) {
+    this.whitelistService.create(whitelist).then(value => {
+      res.status(HttpStatus.OK).json(value);
+    }).catch(err => {
+      res.status(HttpStatus.BAD_REQUEST).send(`Can not create whitelist err: ${err}`);
+    })
   }
 
   @Post('add')
-  async add(@Body() whitelist: IWhitelist): Promise<IWhitelist> {
-    return await this.whitelistService.add(whitelist);
+  add(@Body() whitelist: IWhitelist, @Res() res: Response) {
+    this.whitelistService.add(whitelist).then(value => {
+      res.status(HttpStatus.OK).json(value);
+    }).catch(err => {
+      res.status(HttpStatus.BAD_REQUEST).send(`Can not add whitelist err: ${err}`);
+    })
   }
 
   @Get('verify')
-  async verify(@Query() query: IVerify): Promise<boolean> {
-    return await this.whitelistService.verify(query.pool_id, query.address);
+  verify(@Query() query: IVerify, @Res() res: Response) {
+    this.whitelistService.verify(query.id, query.address).then(value => {
+      res.status(HttpStatus.OK).json({result: value});
+    }).catch(err => {
+      res.status(HttpStatus.BAD_REQUEST).send(`Can not verify whitelist err: ${err}`);
+    })
   }
 }

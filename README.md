@@ -52,7 +52,7 @@ method: POST
 
 Body: 
 {
-    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
     "address": [
         "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b"
     ]
@@ -60,7 +60,7 @@ Body:
 
 successResponse:
 {
-    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
     "address": [
         "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b"
     ]
@@ -69,7 +69,7 @@ successResponse:
 
 | RequestField  | Type | Description |
 | ------------- | ------------- | ------------- |
-| pool_id | string  |  64 characters |
+| id | string  |  64 characters |
 | address | [string]  |  list of valid address(hex string)|
 
 ### add
@@ -85,7 +85,7 @@ method: POST
 
 Body:
 {
-    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
     "address": [
         "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
     ]
@@ -94,7 +94,7 @@ Body:
 
 successResponse:
 {
-    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
     "address": [
         "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b",
         "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
@@ -104,16 +104,16 @@ successResponse:
 ```
 | RequestField  | Type | Description |
 | ------------- | ------------- | ------------- |
-| pool_id | string  |  64 characters |
+| id | string  |  64 characters |
 | address | [string]  |  list of valid address(hex string)|
 
 
 ### verify
 
  ```
-url: /whitelist/verify?pool_id={}&address={}
+url: /whitelist/verify?id={}&address={}
 
-example: http://whitelist.gafi.network/whitelist/verify?pool_id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275&address=0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b
+example: http://whitelist.gafi.network/whitelist/verify?id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275&address=0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b
 
 method: GET
 
@@ -121,7 +121,7 @@ successResponse: true/false
 ```
 | RequestField  | Type | Description |
 | ------------- | ------------- | ------------- |
-| pool_id | string  |  64 characters |
+| id | string  |  64 characters |
 | address | string  |  valid address(hex string)|
 
 
@@ -129,14 +129,14 @@ successResponse: true/false
 ### get
 
  ```
-url: /whitelist/get?pool_id={}
+url: /whitelist/get?id={}
 
-example: http://whitelist.gafi.network/whitelist/get?pool_id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275
+example: http://whitelist.gafi.network/whitelist/get?id=3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275
 method: GET
 
 successResponse:
 {
-    "pool_id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
+    "id": "3bf5f0bc42626c7c630507f607fe85b344f9b857579c0c9ffd322611b6cd1275",
     "address": [
         "0x4a1fb7f41007295aa73476541986e12b976c47907e3bce162b835e46a9a3ff0b",
         "0x58880deb6e45ea913801786036f0183d8357104647501dfec35c7eebca7a0406"
@@ -145,5 +145,5 @@ successResponse:
 ```
 | RequestField  | Type | Description |
 | ------------- | ------------- | ------------- |
-| pool_id | string  |  64 characters |
+| id | string  |  64 characters |
 

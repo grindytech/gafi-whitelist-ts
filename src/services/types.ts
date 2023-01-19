@@ -1,4 +1,4 @@
 export interface IWhitelist {
-    pool_id: string;
+    id: string;
     whitelist: string[];
 }
